@@ -11,5 +11,7 @@ public interface IPointStack {
 	void add(Point p);
 
 	Point[] get();
+	
+	String getResult();
 
 }

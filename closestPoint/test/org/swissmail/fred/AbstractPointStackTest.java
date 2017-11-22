@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PointStackTest {
+abstract public class AbstractPointStackTest {
 
 	Point[] points= new Point[] {
 			new Point(1000,1000),
@@ -18,14 +18,12 @@ public class PointStackTest {
 			new Point(-300,-300)
 	};
 	
-	@Before
-	public void setUp() throws Exception {
-		
-	}
 
+	abstract IPointStack createStack(int depth, boolean ascending, Point target);
+	
 	@Test
 	public void testClosest() {
-		IPointStack subject= new QueuePointStack(3, true, new Point(2000,4000));
+		IPointStack subject= createStack(3, true, new Point(2100,4100));
 		
 		for( Point p : points) {
 			subject.add(p);
@@ -36,7 +34,7 @@ public class PointStackTest {
 	
 	@Test
 	public void testFurthest() {
-		IPointStack subject= new QueuePointStack(2, false, new Point(0,0));
+		IPointStack subject= createStack(2, false, new Point(0,0));
 		
 		for( Point p : points) {
 			subject.add(p);

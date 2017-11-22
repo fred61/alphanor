@@ -28,7 +28,7 @@ public class PointDistance {
 				Point target= new Point(Short.parseShort(s[0]), Short.parseShort(s[1]));
 				int keep= Integer.parseInt(s[2]);
 				
-				targetSpecs.add(new QueuePointStack(keep, closest, target));
+				targetSpecs.add(new ListPointStack(keep, closest, target));
 			}
 			i+= 1;
 		}
@@ -71,13 +71,9 @@ public class PointDistance {
 		
 		b.append(stack.getTarget());
 		
-		b.append(" are: [");
-		for (Point p : stack.get()) {
-			b.append(p);
-			b.append(',');
-		}
-		b.setLength(b.length() - 1);
-		b.append(']');
+		b.append(" are: ");
+		
+		b.append(stack.getResult());
 		
 		System.out.println(b.toString());
 		

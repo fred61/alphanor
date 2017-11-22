@@ -1,14 +1,8 @@
 package org.swissmail.fred;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
 public class Point {
-	private static NumberFormat distanceFormat= new DecimalFormat("#.000");
-	
 	private final short x;
 	private final short y;
-	private long squareDistance= -1;
 	
 	public Point(short x, short y) {
 		this.x= x;
@@ -24,17 +18,7 @@ public class Point {
 		this((short)x, (short)y);
 	}
 	
-	public void setTarget(Point target)
-	{
-		this.squareDistance= squareDistanceFrom(target);
-	}
-	
-	long getSquareDistance()
-	{
-		return squareDistance;
-	}
-	
-	private long squareDistanceFrom(Point other)
+	public long squareDistanceFrom(Point other)
 	{
 		long xDistance, yDistance;
 		
@@ -53,13 +37,7 @@ public class Point {
 		b.append(',');
 		b.append(this.y);
 		
-		if (squareDistance >= 0) {
-			b.append(';');
-			b.append(distanceFormat.format(Math.sqrt(squareDistance)));
-		}
-		
 		b.append(')');
-		
 		
 		return b.toString();
 	}
