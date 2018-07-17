@@ -19,7 +19,13 @@ public class ParserTest {
 
 		@Override
 		public void writeItem(Item i) {
-			items.add(i);
+			if (i.subItems == null) {
+				items.add(i);
+			} else {
+				for(Item j: i.subItems) {
+					items.add(j);
+				}
+			}
 		}
 
 		@Override
@@ -65,12 +71,7 @@ public class ParserTest {
 
 	@Test
 	public void singlePageTest() throws Exception {
-		TestItemSink itemSink= new TestItemSink();
-		TestLineSource lineSource= new TestLineSource(singlePageLines);
-		
-		new Parser(lineSource, itemSink).parse();
-		
-		Item[] items= itemSink.items.toArray(new Item[itemSink.items.size()]);
+		Item[] items= getItems(singlePageLines);
 		
 		assertEquals("itemCount", 1, items.length);
 		
@@ -79,12 +80,7 @@ public class ParserTest {
 	
 	@Test
 	public void multiPageTest() throws Exception {
-		TestItemSink itemSink= new TestItemSink();
-		TestLineSource lineSource= new TestLineSource(multiPageLines);
-		
-		new Parser(lineSource, itemSink).parse();
-		
-		Item[] items= itemSink.items.toArray(new Item[itemSink.items.size()]);
+		Item[] items= getItems(multiPageLines);
 		
 		assertEquals("itemCount", 3, items.length);
 		
@@ -93,7 +89,39 @@ public class ParserTest {
 		testItem(items[2], "15.03.18", "15.03.18", "31.80", null, "82'549.48");
 	}
 	
-	void testItem(Item item, String date, String valueDate, String debit, String credit, String balance)
+	@Test
+	public void compoundItemTest1() throws Exception
+	{
+		Item[] items= getItems(compoundItemLines1);
+		
+		assertEquals("itemCount", 2, items.length);
+		
+		testItem(items[0], "09.04.18", "09.04.18", null, "276.00", "79'832.94");
+		testItem(items[1], "09.04.18", "09.04.18", null, "276.00", "79'832.94");
+	}
+	
+	public void compoundItemTest2() throws Exception
+	{
+		Item[] items= getItems(compoundItemLines2);
+		
+		assertEquals("itemCount", 2, items.length);
+		
+		
+		testItem(items[0], "23.04.18", "23.04.18", null, "993.11", "81'267.87");
+		testItem(items[1], "23.04.18", "23.04.18", null, "610.51", "81'267.87");
+	}
+	
+	private Item[] getItems(String lines) throws Exception
+	{
+		TestItemSink itemSink= new TestItemSink();
+		TestLineSource lineSource= new TestLineSource(lines);
+		
+		new Parser(lineSource, itemSink).parse();
+		
+		return itemSink.items.toArray(new Item[itemSink.items.size()]);
+	}
+	
+	private void testItem(Item item, String date, String valueDate, String debit, String credit, String balance)
 	{
 		assertEquals("itemDate", date, item.date);
 		assertEquals("valueDate", valueDate, item.valueDate);
@@ -134,6 +162,30 @@ public class ParserTest {
 		"               8050Zürich\n" + 
 		"               000001015837270200011575061\n" +
 		"                                                                            948'369'911 Seite 4/5\n";
-
 	
+	String compoundItemLines1 = 
+			"        Datum  Text                               Valuta    Belastung   Gutschrift        Saldo\n" + 
+			"        09.04.18 Postgiro                         09.04.18                552.00       79'832.94\n" + 
+			"               Favre M. et Carlen M. B.     276.00\n" + 
+			"               Herbstweg 35\n" + 
+			"               8050Zurich\n" + 
+			"               DonovanCarlenApril 2018\n" + 
+			"               Gudel, Mario                 276.00\n" + 
+			"               Neudorfstrasse 4\n" + 
+			"               8050Zurich\n" +
+			"                                                                            948'369'911 Seite 4/5\n";
+	
+	String compoundItemLines2 =
+			"        Datum  Text                               Valuta    Belastung   Gutschrift        Saldo\n" + 
+			"        23.04.18 Vergütung                        23.04.18    1'603.62                 81'267.87\n" + 
+			"               Heloise Clifford             993.11\n" + 
+			"               Bachstrasse 15\n" + 
+			"               5303Würenlingen\n" + 
+			"               Salary Happy Nest April 2018\n" + 
+			"               Kimberley Middleton          610.51\n" + 
+			"               Grüzenstr. 15\n" + 
+			"               8600Dübendorf\n" + 
+			"               Salary Happy Nest April 2018\n";
+
+			
 }

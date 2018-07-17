@@ -91,7 +91,9 @@ class Item {
 	}
 	
 	boolean possibleCompoundItem() {
-		return text.toString().equals("Vergütung") && debit != null && credit == null;
+		return text.toString().equals("Vergütung") && debit != null && credit == null ||
+			   text.toString().equals("Postgiro") && debit == null && credit != null
+			   ;
 	}
 	
 	int writeToSheet(int lineNumber, WritableSheet sheet)  {
