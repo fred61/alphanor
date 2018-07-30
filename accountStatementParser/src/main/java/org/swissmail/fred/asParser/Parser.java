@@ -61,6 +61,8 @@ public class Parser {
 				}
 			}
 			
+			currentPage.end();
+			
 			for (Item i : items) {
 				sink.writeItem(i);
 			}
