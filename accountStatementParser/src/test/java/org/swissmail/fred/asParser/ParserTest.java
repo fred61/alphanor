@@ -90,6 +90,7 @@ public class ParserTest {
 	}
 	
 	@Test
+	// test that "Postgiro" is recognised as a compound item
 	public void compoundItemTest1() throws Exception
 	{
 		Item[] items= getItems(compoundItemLines1);
@@ -100,15 +101,18 @@ public class ParserTest {
 		testItem(items[1], "09.04.18", "09.04.18", null, "276.00", "79'832.94");
 	}
 	
+	@Test
+	// test that "Vergütung" is recognised as a compound item and that "Saldo per" is not a part of such a compound item
 	public void compoundItemTest2() throws Exception
 	{
 		Item[] items= getItems(compoundItemLines2);
 		
-		assertEquals("itemCount", 2, items.length);
+		assertEquals("itemCount", 3, items.length);
 		
 		
-		testItem(items[0], "23.04.18", "23.04.18", null, "993.11", "81'267.87");
-		testItem(items[1], "23.04.18", "23.04.18", null, "610.51", "81'267.87");
+		testItem(items[0], "31.05.18", "31.05.18", "1'166.18", null, "88'445.71");
+		testItem(items[1], "31.05.18", "31.05.18", "610.51",   null, "88'445.71");
+		testItem(items[2], "31.05.18", "31.05.18", "418.63",   null, "88'445.71");
 	}
 	
 	private Item[] getItems(String lines) throws Exception
@@ -176,16 +180,22 @@ public class ParserTest {
 			"                                                                            948'369'911 Seite 4/5\n";
 	
 	String compoundItemLines2 =
-			"        Datum  Text                               Valuta    Belastung   Gutschrift        Saldo\n" + 
-			"        23.04.18 Vergütung                        23.04.18    1'603.62                 81'267.87\n" + 
-			"               Heloise Clifford             993.11\n" + 
-			"               Bachstrasse 15\n" + 
-			"               5303Würenlingen\n" + 
-			"               Salary Happy Nest April 2018\n" + 
-			"               Kimberley Middleton          610.51\n" + 
-			"               Grüzenstr. 15\n" + 
-			"               8600Dübendorf\n" + 
-			"               Salary Happy Nest April 2018\n";
+			"        Datum  Text                               Valuta    Belastung   Gutschrift        Saldo\n" +
+	        "        31.05.18 Vergütung                        31.05.18    2'195.32                 88'445.71\n" + 
+	        "               Heloise Clifford           1'166.18\n" + 
+	        "               Bachstrasse 15\n" + 
+	        "               5303Würenlingen\n" + 
+	        "               Salary Happy Nest May 2018\n" + 
+	        "               Kimberley Middleton          610.51\n" + 
+	        "               Grüzenstr. 15\n" + 
+	        "               8600Dübendorf\n" + 
+	        "               Salary Happy Nest May 2018\n" + 
+	        "               Sandra GomesdeOliveira da Silva418.63\n" + 
+	        "               8952Schlieren\n" + 
+	        "               Schönenwerdstr 1\n" + 
+	        "               Salary Happy Nest April 2017\n" + 
+	        "               Saldo per 31.05.2018                           4'007.16   7'285.00      88'445.71\n" + 
+	        "                                                                            955'831'073  Seite 4/5\n";
 
 			
 }

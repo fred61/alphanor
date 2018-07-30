@@ -2,11 +2,15 @@ package org.swissmail.fred.asParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 class Line {
 	static Pattern pageEndPattern = Pattern.compile("\\d+/\\d+");
+	static Set<String> compoundItemCannotStartWith = new HashSet<>(Arrays.asList("Saldo"));
+	
 	Token[] tokens;
 
 	Line(String line) {
@@ -63,6 +67,7 @@ class Line {
 
 	boolean isCompoundItemStart() {
 		return tokens[0].getTokenClass() == Token.TokenClass.text
+				&& !compoundItemCannotStartWith.contains(tokens[0].content)
 				&& tokens[tokens.length - 1].getTokenClass() == Token.TokenClass.amount;
 	}
 
